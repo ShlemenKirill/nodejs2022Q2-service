@@ -50,13 +50,7 @@ export class TracksController {
     try {
       return this.trackService.createTrack(createTrackDto);
     } catch (error) {
-      switch (error.message) {
-        case ErrorsMessages.emptyFields:
-          throw new HttpException(
-            ErrorsMessages.emptyFields,
-            HttpStatus.BAD_REQUEST,
-          );
-      }
+      console.error(error.message);
     }
   }
   @Put(':id')
@@ -69,11 +63,6 @@ export class TracksController {
       return this.trackService.updateTrack(id, updateTrackDto);
     } catch (error) {
       switch (error.message) {
-        case ErrorsMessages.emptyFields:
-          throw new HttpException(
-            ErrorsMessages.emptyFields,
-            HttpStatus.BAD_REQUEST,
-          );
         case ErrorsMessages.notValidUuid:
           throw new HttpException(
             ErrorsMessages.notValidUuid,

@@ -24,7 +24,6 @@ export class TrackService {
   }
   createTrack(createTrackDto: CreateTrackDto): TrackSchema {
     const { name, albumId, duration, artistId } = createTrackDto;
-    if (!name || !duration) throw new Error(ErrorsMessages.emptyFields);
     const track = {
       id: uuidv4(),
       name,
@@ -40,7 +39,6 @@ export class TrackService {
       throw new Error(ErrorsMessages.notValidUuid);
     }
     const { name, albumId, duration, artistId } = updateTrackDto;
-    if (!name || !duration) throw new Error(ErrorsMessages.emptyFields);
     const trackToUpdate = localStorage.tracks.find((el) => el.id === id);
     if (!trackToUpdate) {
       throw new Error(ErrorsMessages.trackNotExist);

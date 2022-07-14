@@ -52,13 +52,7 @@ export class UsersController {
     try {
       return this.usersService.createUser(createUserDto);
     } catch (error) {
-      switch (error.message) {
-        case ErrorsMessages.emptyFields:
-          throw new HttpException(
-            ErrorsMessages.emptyFields,
-            HttpStatus.BAD_REQUEST,
-          );
-      }
+      console.error(error.message);
     }
   }
   @Put(':id')
@@ -71,11 +65,6 @@ export class UsersController {
       return this.usersService.updateUser(id, updateUserDto);
     } catch (error) {
       switch (error.message) {
-        case ErrorsMessages.emptyFields:
-          throw new HttpException(
-            ErrorsMessages.emptyFields,
-            HttpStatus.BAD_REQUEST,
-          );
         case ErrorsMessages.userNotExist:
           throw new HttpException(
             ErrorsMessages.userNotExist,

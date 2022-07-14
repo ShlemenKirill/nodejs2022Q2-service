@@ -29,7 +29,6 @@ export class UsersService {
   }
   createUser(createUserDto: CreateUserDto): UserSchemaResponse {
     const { login, password } = createUserDto;
-    if (!login || !password) throw new Error(ErrorsMessages.emptyFields);
     const user = {
       id: uuidv4(),
       login,
@@ -52,8 +51,6 @@ export class UsersService {
       throw new Error(ErrorsMessages.notValidUuid);
     }
     const { oldPassword, newPassword } = updateUserDto;
-    if (!oldPassword || !newPassword)
-      throw new Error(ErrorsMessages.emptyFields);
     const userToUpdate = localStorage.users.find((el) => el.id === id);
     if (!userToUpdate) {
       throw new Error(ErrorsMessages.userNotExist);

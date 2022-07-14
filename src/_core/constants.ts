@@ -4,5 +4,5 @@ export enum ErrorsMessages {
   userNotExist = "User doesn't exist",
   trackNotExist = "Track doesn't exist",
   artistNotExist = "Artist doesn't exist",
-  emptyFields = 'Required fields will not be empty',
+  albumsNotExist = "Albums doesn't exist",
 }

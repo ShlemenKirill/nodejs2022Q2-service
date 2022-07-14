@@ -52,13 +52,7 @@ export class ArtistsController {
     try {
       return this.artistService.createArtist(createArtistDto);
     } catch (error) {
-      switch (error.message) {
-        case ErrorsMessages.emptyFields:
-          throw new HttpException(
-            ErrorsMessages.emptyFields,
-            HttpStatus.BAD_REQUEST,
-          );
-      }
+      console.error(error.message);
     }
   }
   @Put(':id')
@@ -71,11 +65,6 @@ export class ArtistsController {
       return this.artistService.updateArtist(id, updateArtistDto);
     } catch (error) {
       switch (error.message) {
-        case ErrorsMessages.emptyFields:
-          throw new HttpException(
-            ErrorsMessages.emptyFields,
-            HttpStatus.BAD_REQUEST,
-          );
         case ErrorsMessages.notValidUuid:
           throw new HttpException(
             ErrorsMessages.notValidUuid,

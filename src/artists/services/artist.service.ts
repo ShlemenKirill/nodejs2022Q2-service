@@ -24,7 +24,6 @@ export class ArtistService {
   }
   createArtist(createArtistDto: CreateArtistDto): ArtistSchema {
     const { name, grammy } = createArtistDto;
-    if (!name || !grammy) throw new Error(ErrorsMessages.emptyFields);
     const artist = {
       id: uuidv4(),
       name,
@@ -38,8 +37,6 @@ export class ArtistService {
       throw new Error(ErrorsMessages.notValidUuid);
     }
     const { name, grammy } = updateArtistDto;
-    if (!name || typeof grammy !== 'boolean' || !updateArtistDto)
-      throw new Error(ErrorsMessages.emptyFields);
     const artistToUpdate = localStorage.artists.find((el) => el.id === id);
     if (!artistToUpdate) {
       throw new Error(ErrorsMessages.artistNotExist);
@@ -67,6 +64,15 @@ export class ArtistService {
       (el) => el.id === id,
     );
     localStorage.artists.splice(indexOfArtistToDelete, 1);
+    localStorage.tracks.map((track) => {
+      const { artistId, ...rest } = track;
+      if (artistId === id) {
+        return {
+          artistId: null,
+          ...rest,
+        };
+      }
+    });
     return artistToDelete;
   }
 }
