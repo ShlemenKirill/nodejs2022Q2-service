@@ -49,7 +49,7 @@ export class UsersService {
     if (password !== oldPassword) {
       throw new Error(ErrorsMessages.notCorrectPassword);
     }
-    const indexOfUserToUpdate = localStorage.users.indexOf(
+    const indexOfUserToUpdate = localStorage.users.findIndex(
       (el) => el.id === id,
     );
     const resultUser = {
@@ -71,7 +71,7 @@ export class UsersService {
     if (!userToDelete) {
       throw new Error(ErrorsMessages.userNotExist);
     }
-    const indexOfUserToDelete = localStorage.users.indexOf(
+    const indexOfUserToDelete = localStorage.users.findIndex(
       (el) => el.id === id,
     );
     localStorage.users.splice(indexOfUserToDelete, 1);
