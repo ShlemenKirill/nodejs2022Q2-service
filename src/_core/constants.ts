@@ -3,5 +3,6 @@ export enum ErrorsMessages {
   notValidUuid = 'Not valid uuid',
   userNotExist = "User doesn't exist",
   trackNotExist = "Track doesn't exist",
+  artistNotExist = "Artist doesn't exist",
   emptyFields = 'Required fields will not be empty',
 }
