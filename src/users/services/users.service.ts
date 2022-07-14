@@ -1,5 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { UserSchema } from '../schemas/user.schema';
+import {
+  ClassSerializerInterceptor,
+  Injectable,
+  UseInterceptors,
+} from '@nestjs/common';
+import { UserSchemaResponse } from '../schemas/user.schema';
 import { localStorage } from '../../LocalStorage';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,10 +13,11 @@ import { ErrorsMessages } from '../../_core/constants';
 
 @Injectable()
 export class UsersService {
-  getAll(): UserSchema[] {
+  @UseInterceptors(ClassSerializerInterceptor)
+  getAll(): UserSchemaResponse[] {
     return localStorage.users;
   }
-  getById(id): UserSchema {
+  getById(id): UserSchemaResponse {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
@@ -22,7 +27,7 @@ export class UsersService {
     }
     return user;
   }
-  createUser(createUserDto: CreateUserDto): UserSchema {
+  createUser(createUserDto: CreateUserDto): UserSchemaResponse {
     const { login, password } = createUserDto;
     if (!login || !password) throw new Error(ErrorsMessages.emptyFields);
     const user = {
@@ -34,13 +39,21 @@ export class UsersService {
       updatedAt: Date.now(),
     };
     localStorage.users.push(user);
-    return user;
+    return {
+      id: user.id,
+      login: user.login,
+      version: user.version,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
   }
-  updateUser(id: string, updateUserDto: UpdatePasswordDto): UserSchema {
+  updateUser(id: string, updateUserDto: UpdatePasswordDto): UserSchemaResponse {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
     const { oldPassword, newPassword } = updateUserDto;
+    if (!oldPassword || !newPassword)
+      throw new Error(ErrorsMessages.emptyFields);
     const userToUpdate = localStorage.users.find((el) => el.id === id);
     if (!userToUpdate) {
       throw new Error(ErrorsMessages.userNotExist);
@@ -56,14 +69,21 @@ export class UsersService {
       id: userId,
       login,
       password: newPassword,
-      version,
+      version: version + 1,
       createdAt,
       updatedAt: Date.now(),
     };
     localStorage.users.splice(indexOfUserToUpdate, 1, resultUser);
-    return resultUser;
+    return {
+      id: resultUser.id,
+      login: resultUser.login,
+      version: resultUser.version,
+      createdAt: resultUser.createdAt,
+      updatedAt: resultUser.updatedAt,
+    };
   }
-  deleteUser(id: string): UserSchema {
+
+  deleteUser(id: string): UserSchemaResponse {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }

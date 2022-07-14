@@ -68,17 +68,22 @@ export class TracksController {
     try {
       return this.trackService.updateTrack(id, updateTrackDto);
     } catch (error) {
-      if (error.message === ErrorsMessages.trackNotExist) {
-        throw new HttpException(
-          ErrorsMessages.trackNotExist,
-          HttpStatus.NOT_FOUND,
-        );
-      }
-      if (error.message === ErrorsMessages.notValidUuid) {
-        throw new HttpException(
-          ErrorsMessages.notValidUuid,
-          HttpStatus.BAD_REQUEST,
-        );
+      switch (error.message) {
+        case ErrorsMessages.emptyFields:
+          throw new HttpException(
+            ErrorsMessages.emptyFields,
+            HttpStatus.BAD_REQUEST,
+          );
+        case ErrorsMessages.notValidUuid:
+          throw new HttpException(
+            ErrorsMessages.notValidUuid,
+            HttpStatus.BAD_REQUEST,
+          );
+        case ErrorsMessages.trackNotExist:
+          throw new HttpException(
+            ErrorsMessages.trackNotExist,
+            HttpStatus.NOT_FOUND,
+          );
       }
     }
   }

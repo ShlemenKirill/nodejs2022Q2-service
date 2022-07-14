@@ -40,9 +40,10 @@ export class TrackService {
       throw new Error(ErrorsMessages.notValidUuid);
     }
     const { name, albumId, duration, artistId } = updateTrackDto;
+    if (!name || !duration) throw new Error(ErrorsMessages.emptyFields);
     const trackToUpdate = localStorage.tracks.find((el) => el.id === id);
     if (!trackToUpdate) {
-      throw new Error(ErrorsMessages.userNotExist);
+      throw new Error(ErrorsMessages.trackNotExist);
     }
     const indexOfUserToUpdate = localStorage.tracks.findIndex((el) => {
       return el.id === id;
