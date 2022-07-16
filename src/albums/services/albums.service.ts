@@ -66,15 +66,13 @@ export class AlbumsService {
       (el) => el.id === id,
     );
     localStorage.albums.splice(indexOfAlbumToDelete, 1);
-    localStorage.tracks.map((track) => {
-      const { albumId, ...rest } = track;
-      if (albumId === id) {
-        return {
-          albumId: null,
-          ...rest,
-        };
-      }
-    });
+    const indexOfTrackToUpdate = localStorage.tracks.findIndex(
+      (el) => el.albumId === id,
+    );
+    localStorage.tracks[indexOfTrackToUpdate] = {
+      ...localStorage.tracks[indexOfTrackToUpdate],
+      albumId: null,
+    };
     return albumToDelete;
   }
 }

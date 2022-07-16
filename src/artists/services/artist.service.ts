@@ -64,15 +64,13 @@ export class ArtistService {
       (el) => el.id === id,
     );
     localStorage.artists.splice(indexOfArtistToDelete, 1);
-    localStorage.tracks.map((track) => {
-      const { artistId, ...rest } = track;
-      if (artistId === id) {
-        return {
-          artistId: null,
-          ...rest,
-        };
-      }
-    });
+    const indexOfTrackToUpdate = localStorage.tracks.findIndex(
+      (el) => el.artistId === id,
+    );
+    localStorage.tracks[indexOfTrackToUpdate] = {
+      ...localStorage.tracks[indexOfTrackToUpdate],
+      artistId: null,
+    };
     return artistToDelete;
   }
 }
