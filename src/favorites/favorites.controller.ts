@@ -82,7 +82,7 @@ export class FavoritesController {
       }
     }
   }
-  @Delete('/track/:id')
+  @Delete('/album/:id')
   @HttpCode(204)
   async deleteAlbum(@Param('id') id: string) {
     try {

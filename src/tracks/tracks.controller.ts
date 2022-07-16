@@ -16,11 +16,15 @@ import { UpdateTrackDto } from './dto/update-track.dto';
 import { TrackService } from './services/track.service';
 import { ErrorsMessages } from '../_core/constants';
 import { ApiTags } from '@nestjs/swagger';
+import { FavoritesService } from '../favorites/services/favorites.service';
 
 @ApiTags('Tracks')
 @Controller('/track')
 export class TracksController {
-  constructor(private readonly trackService: TrackService) {}
+  constructor(
+    private readonly trackService: TrackService,
+    private readonly favoritesService: FavoritesService,
+  ) {}
   @Get()
   @HttpCode(200)
   async all(): Promise<TrackSchema[]> {
@@ -82,6 +86,7 @@ export class TracksController {
   @HttpCode(204)
   async remove(@Param('id') id: string): Promise<TrackSchema> {
     try {
+      this.favoritesService.deleteTrack(id);
       return this.trackService.deleteTrack(id);
     } catch (error) {
       switch (error.message) {

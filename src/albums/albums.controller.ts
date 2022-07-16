@@ -16,11 +16,15 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { AlbumsService } from './services/albums.service';
 import { ErrorsMessages } from '../_core/constants';
 import { ApiTags } from '@nestjs/swagger';
+import { FavoritesService } from '../favorites/services/favorites.service';
 
 @ApiTags('Albums')
 @Controller('/album')
 export class AlbumsController {
-  constructor(private readonly albumsService: AlbumsService) {}
+  constructor(
+    private readonly albumsService: AlbumsService,
+    private readonly favoritesService: FavoritesService,
+  ) {}
   @Get()
   @HttpCode(200)
   async all(): Promise<AlbumsSchema[]> {
@@ -82,6 +86,7 @@ export class AlbumsController {
   @HttpCode(204)
   async remove(@Param('id') id: string): Promise<AlbumsSchema> {
     try {
+      this.favoritesService.deleteAlbum(id);
       return this.albumsService.deleteAlbum(id);
     } catch (error) {
       switch (error.message) {

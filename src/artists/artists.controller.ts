@@ -16,11 +16,15 @@ import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ArtistService } from './services/artist.service';
 import { ErrorsMessages } from '../_core/constants';
 import { ApiTags } from '@nestjs/swagger';
+import { FavoritesService } from '../favorites/services/favorites.service';
 
 @ApiTags('Artists')
 @Controller('/artist')
 export class ArtistsController {
-  constructor(private readonly artistService: ArtistService) {}
+  constructor(
+    private readonly artistService: ArtistService,
+    private readonly favoritesService: FavoritesService,
+  ) {}
   @Get()
   @HttpCode(200)
   async all(): Promise<ArtistSchema[]> {
@@ -84,6 +88,7 @@ export class ArtistsController {
   @HttpCode(204)
   async remove(@Param('id') id: string): Promise<ArtistSchema> {
     try {
+      this.favoritesService.deleteArtist(id);
       return this.artistService.deleteArtist(id);
     } catch (error) {
       switch (error.message) {
