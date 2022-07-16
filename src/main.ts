@@ -19,6 +19,6 @@ async function bootstrap() {
   fs.writeFileSync('./doc/api.yaml', yamlString);
   SwaggerModule.setup('/doc', app, document);
 
-  await app.listen(4000);
+  await app.listen(process.env.PORT || 4000);
 }
 bootstrap();
