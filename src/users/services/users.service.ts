@@ -1,8 +1,4 @@
-import {
-  ClassSerializerInterceptor,
-  Injectable,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserSchema } from '../schemas/user.schema';
 import { localStorage } from '../../LocalStorage';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -13,7 +9,6 @@ import { ErrorsMessages } from '../../_core/constants';
 
 @Injectable()
 export class UsersService {
-  @UseInterceptors(ClassSerializerInterceptor)
   getAll(): UserSchema[] {
     return localStorage.users;
   }

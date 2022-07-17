@@ -40,7 +40,9 @@ export class UsersController {
   })
   @UseInterceptors(ClassSerializerInterceptor)
   async all(): Promise<UserSchema[]> {
-    return this.usersService.getAll();
+    return this.usersService.getAll().map((user) => {
+      return new UserSchema({ ...user });
+    });
   }
 
   @Get(':id')
