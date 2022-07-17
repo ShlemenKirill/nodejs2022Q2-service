@@ -471,12 +471,18 @@ components:
       properties:
         name:
           type: string
+          example: Test track
         artistId:
           type: string
+          example: null
+          description: refers to Artist
         albumId:
           type: string
+          example: null
+          description: refers to Album
         duration:
           type: number
+          example: 20
       required:
         - name
         - artistId
@@ -487,12 +493,18 @@ components:
       properties:
         name:
           type: string
+          example: Updated track
         artistId:
           type: string
+          example: null
+          description: refers to Artist
         albumId:
           type: string
+          example: null
+          description: refers to Album
         duration:
           type: number
+          example: 40
       required:
         - name
         - artistId
@@ -503,8 +515,10 @@ components:
       properties:
         name:
           type: string
+          example: Test artist
         grammy:
           type: boolean
+          example: false
       required:
         - name
         - grammy
@@ -513,8 +527,10 @@ components:
       properties:
         name:
           type: string
+          example: Updated artist
         grammy:
           type: boolean
+          example: true
       required:
         - name
         - grammy

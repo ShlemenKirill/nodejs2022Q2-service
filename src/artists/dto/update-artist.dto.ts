@@ -2,10 +2,10 @@ import { IsBoolean, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateArtistDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Updated artist' })
   @IsString()
   name: string;
-  @ApiProperty()
+  @ApiProperty({ example: true })
   @IsBoolean()
   grammy: boolean;
 }
