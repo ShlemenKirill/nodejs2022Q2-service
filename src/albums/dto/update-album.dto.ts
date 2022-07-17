@@ -2,15 +2,21 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateAlbumDto {
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Changed Album',
+  })
   @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 1990,
+  })
   @IsNumber()
   year: number;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: null,
+  })
   @IsString()
   @IsOptional()
   artistId: string | null; // refers to Artist

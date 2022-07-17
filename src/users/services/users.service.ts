@@ -3,7 +3,7 @@ import {
   Injectable,
   UseInterceptors,
 } from '@nestjs/common';
-import { UserSchemaResponse } from '../schemas/user.schema';
+import { UserSchema } from '../schemas/user.schema';
 import { localStorage } from '../../LocalStorage';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -14,10 +14,10 @@ import { ErrorsMessages } from '../../_core/constants';
 @Injectable()
 export class UsersService {
   @UseInterceptors(ClassSerializerInterceptor)
-  getAll(): UserSchemaResponse[] {
+  getAll(): UserSchema[] {
     return localStorage.users;
   }
-  getById(id): UserSchemaResponse {
+  getById(id): UserSchema {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
@@ -27,7 +27,7 @@ export class UsersService {
     }
     return user;
   }
-  createUser(createUserDto: CreateUserDto): UserSchemaResponse {
+  createUser(createUserDto: CreateUserDto): UserSchema {
     const { login, password } = createUserDto;
     const user = {
       id: uuidv4(),
@@ -38,15 +38,9 @@ export class UsersService {
       updatedAt: Date.now(),
     };
     localStorage.users.push(user);
-    return {
-      id: user.id,
-      login: user.login,
-      version: user.version,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+    return user;
   }
-  updateUser(id: string, updateUserDto: UpdatePasswordDto): UserSchemaResponse {
+  updateUser(id: string, updateUserDto: UpdatePasswordDto): UserSchema {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
@@ -71,16 +65,10 @@ export class UsersService {
       updatedAt: Date.now(),
     };
     localStorage.users.splice(indexOfUserToUpdate, 1, resultUser);
-    return {
-      id: resultUser.id,
-      login: resultUser.login,
-      version: resultUser.version,
-      createdAt: resultUser.createdAt,
-      updatedAt: resultUser.updatedAt,
-    };
+    return resultUser;
   }
 
-  deleteUser(id: string): UserSchemaResponse {
+  deleteUser(id: string): UserSchema {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }

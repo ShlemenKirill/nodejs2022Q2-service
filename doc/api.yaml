@@ -6,7 +6,13 @@ paths:
       parameters: []
       responses:
         "200":
-          description: ""
+          description: Users records returns successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserSchema"
       tags:
         &a1
         - Users
@@ -21,7 +27,11 @@ paths:
               $ref: "#/components/schemas/CreateUserDto"
       responses:
         "201":
-          description: ""
+          description: The record has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSchema"
       tags: *a1
   "/user/{id}":
     get:
@@ -34,7 +44,15 @@ paths:
             type: string
       responses:
         "200":
-          description: ""
+          description: User record returns successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSchema"
+        "400":
+          description: Incorrect input
+        "404":
+          description: User don't exist
       tags: *a1
     put:
       operationId: UsersController_update
@@ -52,7 +70,17 @@ paths:
               $ref: "#/components/schemas/UpdatePasswordDto"
       responses:
         "200":
-          description: ""
+          description: User record updates successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSchema"
+        "400":
+          description: Not valid UUID
+        "403":
+          description: Incorrect password
+        "404":
+          description: User don't exist
       tags: *a1
     delete:
       operationId: UsersController_remove
@@ -63,8 +91,10 @@ paths:
           schema:
             type: string
       responses:
-        "204":
-          description: ""
+        "400":
+          description: Not valid UUID
+        "404":
+          description: User deletes successfully
       tags: *a1
   /track:
     get:
@@ -204,7 +234,13 @@ paths:
       parameters: []
       responses:
         "200":
-          description: ""
+          description: Albums records returns successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AlbumsSchema"
       tags:
         &a4
         - Albums
@@ -219,7 +255,11 @@ paths:
               $ref: "#/components/schemas/CreateAlbumDto"
       responses:
         "201":
-          description: ""
+          description: The record has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlbumsSchema"
       tags: *a4
   "/album/{id}":
     get:
@@ -232,7 +272,15 @@ paths:
             type: string
       responses:
         "200":
-          description: ""
+          description: Album record returns successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlbumsSchema"
+        "400":
+          description: Incorrect input
+        "404":
+          description: Album don't exist
       tags: *a4
     put:
       operationId: AlbumsController_update
@@ -250,7 +298,17 @@ paths:
               $ref: "#/components/schemas/UpdateAlbumDto"
       responses:
         "200":
-          description: ""
+          description: Album record updates successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlbumsSchema"
+        "400":
+          description: Not valid UUID
+        "403":
+          description: Incorrect password
+        "404":
+          description: Album don't exist
       tags: *a4
     delete:
       operationId: AlbumsController_remove
@@ -261,8 +319,10 @@ paths:
           schema:
             type: string
       responses:
-        "204":
-          description: ""
+        "400":
+          description: Not valid UUID
+        "404":
+          description: Album deletes successfully
       tags: *a4
   /favs:
     get:
@@ -358,13 +418,37 @@ tags: []
 servers: []
 components:
   schemas:
+    UserSchema:
+      type: object
+      properties:
+        id:
+          type: string
+        login:
+          type: string
+        password:
+          type: string
+        version:
+          type: number
+        createdAt:
+          type: number
+        updatedAt:
+          type: number
+      required:
+        - id
+        - login
+        - password
+        - version
+        - createdAt
+        - updatedAt
     CreateUserDto:
       type: object
       properties:
         login:
           type: string
+          example: Test user
         password:
           type: string
+          example: qwerty
       required:
         - login
         - password
@@ -373,8 +457,12 @@ components:
       properties:
         oldPassword:
           type: string
+          description: Previous password
+          example: qwerty
         newPassword:
           type: string
+          description: New password
+          example: "12345"
       required:
         - oldPassword
         - newPassword
@@ -430,15 +518,34 @@ components:
       required:
         - name
         - grammy
-    CreateAlbumDto:
+    AlbumsSchema:
       type: object
       properties:
+        id:
+          type: string
         name:
           type: string
         year:
           type: number
         artistId:
           type: string
+      required:
+        - id
+        - name
+        - year
+        - artistId
+    CreateAlbumDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Test album
+        year:
+          type: number
+          example: 1980
+        artistId:
+          type: string
+          example: null
       required:
         - name
         - year
@@ -448,10 +555,13 @@ components:
       properties:
         name:
           type: string
+          example: Changed Album
         year:
           type: number
+          example: 1990
         artistId:
           type: string
+          example: null
       required:
         - name
         - year
