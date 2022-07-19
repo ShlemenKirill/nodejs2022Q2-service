@@ -1,584 +1,780 @@
-openapi: 3.0.0
-paths:
-  /user:
-    get:
-      operationId: UsersController_all
-      parameters: []
-      responses:
-        "200":
-          description: Users records returns successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/UserSchema"
-      tags:
-        &a1
-        - Users
-    post:
-      operationId: UsersController_create
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateUserDto"
-      responses:
-        "201":
-          description: The record has been successfully created.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserSchema"
-      tags: *a1
-  "/user/{id}":
-    get:
-      operationId: UsersController_getById
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "200":
-          description: User record returns successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserSchema"
-        "400":
-          description: Incorrect input
-        "404":
-          description: User don't exist
-      tags: *a1
-    put:
-      operationId: UsersController_update
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdatePasswordDto"
-      responses:
-        "200":
-          description: User record updates successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserSchema"
-        "400":
-          description: Not valid UUID
-        "403":
-          description: Incorrect password
-        "404":
-          description: User don't exist
-      tags: *a1
-    delete:
-      operationId: UsersController_remove
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "400":
-          description: Not valid UUID
-        "404":
-          description: User deletes successfully
-      tags: *a1
-  /track:
-    get:
-      operationId: TracksController_all
-      parameters: []
-      responses:
-        "200":
-          description: ""
-      tags:
-        &a2
-        - Tracks
-    post:
-      operationId: TracksController_create
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateTrackDto"
-      responses:
-        "201":
-          description: ""
-      tags: *a2
-  "/track/{id}":
-    get:
-      operationId: TracksController_getById
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "200":
-          description: ""
-      tags: *a2
-    put:
-      operationId: TracksController_update
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateTrackDto"
-      responses:
-        "200":
-          description: ""
-      tags: *a2
-    delete:
-      operationId: TracksController_remove
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "204":
-          description: ""
-      tags: *a2
-  /artist:
-    get:
-      operationId: ArtistsController_all
-      parameters: []
-      responses:
-        "200":
-          description: ""
-      tags:
-        &a3
-        - Artists
-    post:
-      operationId: ArtistsController_create
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateArtistDto"
-      responses:
-        "201":
-          description: ""
-      tags: *a3
-  "/artist/{id}":
-    get:
-      operationId: ArtistsController_getById
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "200":
-          description: ""
-      tags: *a3
-    put:
-      operationId: ArtistsController_update
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateArtistDto"
-      responses:
-        "200":
-          description: ""
-      tags: *a3
-    delete:
-      operationId: ArtistsController_remove
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "204":
-          description: ""
-      tags: *a3
-  /album:
-    get:
-      operationId: AlbumsController_all
-      parameters: []
-      responses:
-        "200":
-          description: Albums records returns successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/AlbumsSchema"
-      tags:
-        &a4
-        - Albums
-    post:
-      operationId: AlbumsController_create
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateAlbumDto"
-      responses:
-        "201":
-          description: The record has been successfully created.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AlbumsSchema"
-      tags: *a4
-  "/album/{id}":
-    get:
-      operationId: AlbumsController_getById
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Album record returns successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AlbumsSchema"
-        "400":
-          description: Incorrect input
-        "404":
-          description: Album don't exist
-      tags: *a4
-    put:
-      operationId: AlbumsController_update
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateAlbumDto"
-      responses:
-        "200":
-          description: Album record updates successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AlbumsSchema"
-        "400":
-          description: Not valid UUID
-        "403":
-          description: Incorrect password
-        "404":
-          description: Album don't exist
-      tags: *a4
-    delete:
-      operationId: AlbumsController_remove
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "400":
-          description: Not valid UUID
-        "404":
-          description: Album deletes successfully
-      tags: *a4
-  /favs:
-    get:
-      operationId: FavoritesController_all
-      parameters: []
-      responses:
-        "200":
-          description: ""
-      tags:
-        &a5
-        - Favorites
-  "/favs/track/{id}":
-    post:
-      operationId: FavoritesController_addTrack
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "201":
-          description: ""
-      tags: *a5
-    delete:
-      operationId: FavoritesController_deleteTrack
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "204":
-          description: ""
-      tags: *a5
-  "/favs/album/{id}":
-    post:
-      operationId: FavoritesController_addAlbum
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "201":
-          description: ""
-      tags: *a5
-    delete:
-      operationId: FavoritesController_deleteAlbum
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "204":
-          description: ""
-      tags: *a5
-  "/favs/artist/{id}":
-    post:
-      operationId: FavoritesController_addArtist
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "201":
-          description: ""
-      tags: *a5
-    delete:
-      operationId: FavoritesController_deleteArtist
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "204":
-          description: ""
-      tags: *a5
-info:
-  title: Home Library
-  description: Home library api
-  version: "1.0"
-  contact: {}
-tags: []
-servers: []
-components:
-  schemas:
-    UserSchema:
-      type: object
-      properties:
-        id:
-          type: string
-        login:
-          type: string
-        password:
-          type: string
-        version:
-          type: number
-        createdAt:
-          type: number
-        updatedAt:
-          type: number
-      required:
-        - id
-        - login
-        - password
-        - version
-        - createdAt
-        - updatedAt
-    CreateUserDto:
-      type: object
-      properties:
-        login:
-          type: string
-          example: Test user
-        password:
-          type: string
-          example: qwerty
-      required:
-        - login
-        - password
-    UpdatePasswordDto:
-      type: object
-      properties:
-        oldPassword:
-          type: string
-          description: Previous password
-          example: qwerty
-        newPassword:
-          type: string
-          description: New password
-          example: "12345"
-      required:
-        - oldPassword
-        - newPassword
-    CreateTrackDto:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Test track
-        artistId:
-          type: string
-          example: null
-          description: refers to Artist
-        albumId:
-          type: string
-          example: null
-          description: refers to Album
-        duration:
-          type: number
-          example: 20
-      required:
-        - name
-        - artistId
-        - albumId
-        - duration
-    UpdateTrackDto:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Updated track
-        artistId:
-          type: string
-          example: null
-          description: refers to Artist
-        albumId:
-          type: string
-          example: null
-          description: refers to Album
-        duration:
-          type: number
-          example: 40
-      required:
-        - name
-        - artistId
-        - albumId
-        - duration
-    CreateArtistDto:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Test artist
-        grammy:
-          type: boolean
-          example: false
-      required:
-        - name
-        - grammy
-    UpdateArtistDto:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Updated artist
-        grammy:
-          type: boolean
-          example: true
-      required:
-        - name
-        - grammy
-    AlbumsSchema:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        year:
-          type: number
-        artistId:
-          type: string
-      required:
-        - id
-        - name
-        - year
-        - artistId
-    CreateAlbumDto:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Test album
-        year:
-          type: number
-          example: 1980
-        artistId:
-          type: string
-          example: null
-      required:
-        - name
-        - year
-        - artistId
-    UpdateAlbumDto:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Changed Album
-        year:
-          type: number
-          example: 1990
-        artistId:
-          type: string
-          example: null
-      required:
-        - name
-        - year
-        - artistId
+{
+  'openapi': '3.0.0',
+  'paths':
+    {
+      '/user':
+        {
+          'get':
+            {
+              'operationId': 'UsersController_all',
+              'parameters': [],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Users records returns successfully',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                {
+                                  'type': 'array',
+                                  'items':
+                                    {
+                                      '$ref': '#/components/schemas/UserSchema',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+              'tags': ['Users'],
+            },
+          'post':
+            {
+              'operationId': 'UsersController_create',
+              'parameters': [],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            { '$ref': '#/components/schemas/CreateUserDto' },
+                        },
+                    },
+                },
+              'responses':
+                {
+                  '201':
+                    {
+                      'description': 'The record has been successfully created.',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/UserSchema' },
+                            },
+                        },
+                    },
+                },
+              'tags': ['Users'],
+            },
+        },
+      '/user/{id}':
+        {
+          'get':
+            {
+              'operationId': 'UsersController_getById',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'User record returns successfully',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/UserSchema' },
+                            },
+                        },
+                    },
+                  '400': { 'description': 'Incorrect input' },
+                  '404': { 'description': "User don't exist" },
+                },
+              'tags': ['Users'],
+            },
+          'put':
+            {
+              'operationId': 'UsersController_update',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            {
+                              '$ref': '#/components/schemas/UpdatePasswordDto',
+                            },
+                        },
+                    },
+                },
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'User record updates successfully',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/UserSchema' },
+                            },
+                        },
+                    },
+                  '400': { 'description': 'Not valid UUID' },
+                  '403': { 'description': 'Incorrect password' },
+                  '404': { 'description': "User don't exist" },
+                },
+              'tags': ['Users'],
+            },
+          'delete':
+            {
+              'operationId': 'UsersController_remove',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses':
+                {
+                  '400': { 'description': 'Not valid UUID' },
+                  '404': { 'description': 'User deletes successfully' },
+                },
+              'tags': ['Users'],
+            },
+        },
+      '/track':
+        {
+          'get':
+            {
+              'operationId': 'TracksController_all',
+              'parameters': [],
+              'responses': { '200': { 'description': '' } },
+              'tags': ['Tracks'],
+            },
+          'post':
+            {
+              'operationId': 'TracksController_create',
+              'parameters': [],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            { '$ref': '#/components/schemas/CreateTrackDto' },
+                        },
+                    },
+                },
+              'responses': { '201': { 'description': '' } },
+              'tags': ['Tracks'],
+            },
+        },
+      '/track/{id}':
+        {
+          'get':
+            {
+              'operationId': 'TracksController_getById',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses': { '200': { 'description': '' } },
+              'tags': ['Tracks'],
+            },
+          'put':
+            {
+              'operationId': 'TracksController_update',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            { '$ref': '#/components/schemas/UpdateTrackDto' },
+                        },
+                    },
+                },
+              'responses': { '200': { 'description': '' } },
+              'tags': ['Tracks'],
+            },
+          'delete':
+            {
+              'operationId': 'TracksController_remove',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses': { '204': { 'description': '' } },
+              'tags': ['Tracks'],
+            },
+        },
+      '/artist':
+        {
+          'get':
+            {
+              'operationId': 'ArtistsController_all',
+              'parameters': [],
+              'responses': { '200': { 'description': '' } },
+              'tags': ['Artists'],
+            },
+          'post':
+            {
+              'operationId': 'ArtistsController_create',
+              'parameters': [],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            { '$ref': '#/components/schemas/CreateArtistDto' },
+                        },
+                    },
+                },
+              'responses': { '201': { 'description': '' } },
+              'tags': ['Artists'],
+            },
+        },
+      '/artist/{id}':
+        {
+          'get':
+            {
+              'operationId': 'ArtistsController_getById',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses': { '200': { 'description': '' } },
+              'tags': ['Artists'],
+            },
+          'put':
+            {
+              'operationId': 'ArtistsController_update',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            { '$ref': '#/components/schemas/UpdateArtistDto' },
+                        },
+                    },
+                },
+              'responses': { '200': { 'description': '' } },
+              'tags': ['Artists'],
+            },
+          'delete':
+            {
+              'operationId': 'ArtistsController_remove',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses': { '204': { 'description': '' } },
+              'tags': ['Artists'],
+            },
+        },
+      '/album':
+        {
+          'get':
+            {
+              'operationId': 'AlbumsController_all',
+              'parameters': [],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Albums records returns successfully',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                {
+                                  'type': 'array',
+                                  'items':
+                                    {
+                                      '$ref': '#/components/schemas/AlbumsSchema',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+              'tags': ['Albums'],
+            },
+          'post':
+            {
+              'operationId': 'AlbumsController_create',
+              'parameters': [],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            { '$ref': '#/components/schemas/CreateAlbumDto' },
+                        },
+                    },
+                },
+              'responses':
+                {
+                  '201':
+                    {
+                      'description': 'The record has been successfully created.',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/AlbumsSchema' },
+                            },
+                        },
+                    },
+                },
+              'tags': ['Albums'],
+            },
+        },
+      '/album/{id}':
+        {
+          'get':
+            {
+              'operationId': 'AlbumsController_getById',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Album record returns successfully',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/AlbumsSchema' },
+                            },
+                        },
+                    },
+                  '400': { 'description': 'Incorrect input' },
+                  '404': { 'description': "Album don't exist" },
+                },
+              'tags': ['Albums'],
+            },
+          'put':
+            {
+              'operationId': 'AlbumsController_update',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            { '$ref': '#/components/schemas/UpdateAlbumDto' },
+                        },
+                    },
+                },
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Album record updates successfully',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/AlbumsSchema' },
+                            },
+                        },
+                    },
+                  '400': { 'description': 'Not valid UUID' },
+                  '403': { 'description': 'Incorrect password' },
+                  '404': { 'description': "Album don't exist" },
+                },
+              'tags': ['Albums'],
+            },
+          'delete':
+            {
+              'operationId': 'AlbumsController_remove',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses':
+                {
+                  '400': { 'description': 'Not valid UUID' },
+                  '404': { 'description': 'Album deletes successfully' },
+                },
+              'tags': ['Albums'],
+            },
+        },
+      '/favs':
+        {
+          'get':
+            {
+              'operationId': 'FavoritesController_all',
+              'parameters': [],
+              'responses': { '200': { 'description': '' } },
+              'tags': ['Favorites'],
+            },
+        },
+      '/favs/track/{id}':
+        {
+          'post':
+            {
+              'operationId': 'FavoritesController_addTrack',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses': { '201': { 'description': '' } },
+              'tags': ['Favorites'],
+            },
+          'delete':
+            {
+              'operationId': 'FavoritesController_deleteTrack',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses': { '204': { 'description': '' } },
+              'tags': ['Favorites'],
+            },
+        },
+      '/favs/album/{id}':
+        {
+          'post':
+            {
+              'operationId': 'FavoritesController_addAlbum',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses': { '201': { 'description': '' } },
+              'tags': ['Favorites'],
+            },
+          'delete':
+            {
+              'operationId': 'FavoritesController_deleteAlbum',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses': { '204': { 'description': '' } },
+              'tags': ['Favorites'],
+            },
+        },
+      '/favs/artist/{id}':
+        {
+          'post':
+            {
+              'operationId': 'FavoritesController_addArtist',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses': { '201': { 'description': '' } },
+              'tags': ['Favorites'],
+            },
+          'delete':
+            {
+              'operationId': 'FavoritesController_deleteArtist',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'required': true,
+                    'in': 'path',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses': { '204': { 'description': '' } },
+              'tags': ['Favorites'],
+            },
+        },
+    },
+  'info':
+    {
+      'title': 'Home Library',
+      'description': 'Home library api',
+      'version': '1.0',
+      'contact': {},
+    },
+  'tags': [],
+  'servers': [],
+  'components':
+    {
+      'schemas':
+        {
+          'UserSchema':
+            {
+              'type': 'object',
+              'properties':
+                {
+                  'id': { 'type': 'string' },
+                  'login': { 'type': 'string' },
+                  'password': { 'type': 'string' },
+                  'version': { 'type': 'number' },
+                  'createdAt': { 'type': 'number' },
+                  'updatedAt': { 'type': 'number' },
+                },
+              'required':
+                [
+                  'id',
+                  'login',
+                  'password',
+                  'version',
+                  'createdAt',
+                  'updatedAt',
+                ],
+            },
+          'CreateUserDto':
+            {
+              'type': 'object',
+              'properties':
+                {
+                  'login': { 'type': 'string', 'example': 'Test user' },
+                  'password': { 'type': 'string', 'example': 'qwerty' },
+                },
+              'required': ['login', 'password'],
+            },
+          'UpdatePasswordDto':
+            {
+              'type': 'object',
+              'properties':
+                {
+                  'oldPassword':
+                    {
+                      'type': 'string',
+                      'description': 'Previous password',
+                      'example': 'qwerty',
+                    },
+                  'newPassword':
+                    {
+                      'type': 'string',
+                      'description': 'New password',
+                      'example': '12345',
+                    },
+                },
+              'required': ['oldPassword', 'newPassword'],
+            },
+          'CreateTrackDto':
+            {
+              'type': 'object',
+              'properties':
+                {
+                  'name': { 'type': 'string', 'example': 'Test track' },
+                  'artistId':
+                    {
+                      'type': 'string',
+                      'example': null,
+                      'description': 'refers to Artist',
+                    },
+                  'albumId':
+                    {
+                      'type': 'string',
+                      'example': null,
+                      'description': 'refers to Album',
+                    },
+                  'duration': { 'type': 'number', 'example': 20 },
+                },
+              'required': ['name', 'artistId', 'albumId', 'duration'],
+            },
+          'UpdateTrackDto':
+            {
+              'type': 'object',
+              'properties':
+                {
+                  'name': { 'type': 'string', 'example': 'Updated track' },
+                  'artistId':
+                    {
+                      'type': 'string',
+                      'example': null,
+                      'description': 'refers to Artist',
+                    },
+                  'albumId':
+                    {
+                      'type': 'string',
+                      'example': null,
+                      'description': 'refers to Album',
+                    },
+                  'duration': { 'type': 'number', 'example': 40 },
+                },
+              'required': ['name', 'artistId', 'albumId', 'duration'],
+            },
+          'CreateArtistDto':
+            {
+              'type': 'object',
+              'properties':
+                {
+                  'name': { 'type': 'string', 'example': 'Test artist' },
+                  'grammy': { 'type': 'boolean', 'example': false },
+                },
+              'required': ['name', 'grammy'],
+            },
+          'UpdateArtistDto':
+            {
+              'type': 'object',
+              'properties':
+                {
+                  'name': { 'type': 'string', 'example': 'Updated artist' },
+                  'grammy': { 'type': 'boolean', 'example': true },
+                },
+              'required': ['name', 'grammy'],
+            },
+          'AlbumsSchema':
+            {
+              'type': 'object',
+              'properties':
+                {
+                  'id': { 'type': 'string' },
+                  'name': { 'type': 'string' },
+                  'year': { 'type': 'number' },
+                  'artistId': { 'type': 'string' },
+                },
+              'required': ['id', 'name', 'year', 'artistId'],
+            },
+          'CreateAlbumDto':
+            {
+              'type': 'object',
+              'properties':
+                {
+                  'name': { 'type': 'string', 'example': 'Test album' },
+                  'year': { 'type': 'number', 'example': 1980 },
+                  'artistId': { 'type': 'string', 'example': null },
+                },
+              'required': ['name', 'year', 'artistId'],
+            },
+          'UpdateAlbumDto':
+            {
+              'type': 'object',
+              'properties':
+                {
+                  'name': { 'type': 'string', 'example': 'Changed Album' },
+                  'year': { 'type': 'number', 'example': 1990 },
+                  'artistId': { 'type': 'string', 'example': null },
+                },
+              'required': ['name', 'year', 'artistId'],
+            },
+        },
+    },
+}
