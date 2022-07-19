@@ -1,0 +1,48 @@
+# docker-compose.yml
+
+version: '3.8'
+services:
+
+  # Docker connection string: postgres://postgres:postgres@localhost:5432/
+
+  postgres:
+    image: kirillshlemen/nodejs2022q2-service_postgres
+    container_name: postgres
+    build:
+      context: .
+      dockerfile: ./docker/postgres/Dockerfile
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - postgres
+    env_file:
+      - docker.env
+    ports:
+      - '5432:5432'
+  app:
+    image: kirillshlemen/nodejs2022q2-service_app
+    container_name: nest_REST_API
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    ports:
+      - '4000:4000'
+    depends_on:
+      - postgres
+    volumes:
+      - app:/var/lib/app/data
+    networks:
+      - postgres
+    restart: always
+
+volumes:
+  postgres:
+    name: 'postgres'
+  app:
+    name: 'nest_REST_API'
+networks:
+  postgres:
+    name: 'nest_REST_API_network'
+    driver: bridge
+
