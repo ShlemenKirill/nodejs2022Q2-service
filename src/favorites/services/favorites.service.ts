@@ -1,69 +1,139 @@
 import { Injectable } from '@nestjs/common';
-import { FavoritesSchema } from '../schemas/favorites.schema';
-import { localStorage } from '../../LocalStorage';
 import { ErrorsMessages } from '../../_core/constants';
 import { isUUID } from '@nestjs/common/utils/is-uuid';
+import { PrismaService } from '../../prisma/prisma.service';
+
+const STATIC_UUID = '5c1d6636-7db2-427f-8337-96f1d968ca90';
 
 @Injectable()
 export class FavoritesService {
-  getAll(): FavoritesSchema {
-    return localStorage.favorites;
+  constructor(private prisma: PrismaService) {}
+  private async createIfNotExist() {
+    await this.prisma.favorites.upsert({
+      where: { id: STATIC_UUID },
+      update: {},
+      create: {
+        id: STATIC_UUID,
+      },
+    });
   }
-  addTrack(id: string) {
-    if (!isUUID(id)) {
+  async getAll() {
+    return await this.prisma.favorites.findFirst({
+      where: { id: STATIC_UUID },
+      select: {
+        tracks: { where: { NOT: [{ favoritesId: null }] } },
+        albums: { where: { NOT: [{ favoritesId: null }] } },
+        artists: { where: { NOT: [{ favoritesId: null }] } },
+      },
+    });
+  }
+  async addTrack(trackId: string) {
+    if (!isUUID(trackId)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
-    const track = localStorage.tracks.find((el) => el.id === id);
+    await this.createIfNotExist();
+    const track = await this.prisma.track.findUnique({
+      where: { id: trackId },
+    });
     if (!track) throw new Error(ErrorsMessages.trackNotExist);
-    localStorage.favorites.tracks.push(track);
+    await this.prisma.track.update({
+      where: {
+        id: trackId,
+      },
+      data: {
+        favoritesId: STATIC_UUID,
+      },
+    });
+    return track;
   }
-  deleteTrack(id: string) {
+  async deleteTrack(id: string) {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
-    const isTrackExist = localStorage.tracks.find((el) => el.id === id);
+    const isTrackExist = await this.prisma.track.findUnique({
+      where: { id },
+    });
     if (!isTrackExist) throw new Error(ErrorsMessages.trackNotExist);
-    const indexOfTrack = localStorage.favorites.tracks.findIndex(
-      (el) => el.id === id,
-    );
-    localStorage.favorites.tracks.splice(indexOfTrack, 1);
+    await this.prisma.track.update({
+      where: {
+        id,
+      },
+      data: {
+        favoritesId: null,
+      },
+    });
   }
-  addArtist(id: string) {
+  async addArtist(id: string) {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
-    const artist = localStorage.artists.find((el) => el.id === id);
+    await this.createIfNotExist();
+
+    const artist = await this.prisma.artist.findFirst({
+      where: { id },
+    });
     if (!artist) throw new Error(ErrorsMessages.artistNotExist);
-    localStorage.favorites.artists.push(artist);
+    await this.prisma.artist.update({
+      where: {
+        id,
+      },
+      data: {
+        favoritesId: STATIC_UUID,
+      },
+    });
+    return artist;
   }
-  deleteArtist(id: string) {
+  async deleteArtist(id: string) {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
-    const isArtistExist = localStorage.artists.find((el) => el.id === id);
+    const isArtistExist = await this.prisma.artist.findUnique({
+      where: { id },
+    });
     if (!isArtistExist) throw new Error(ErrorsMessages.artistNotExist);
-    const indexOfTrack = localStorage.favorites.artists.findIndex(
-      (el) => el.id === id,
-    );
-    localStorage.favorites.artists.splice(indexOfTrack, 1);
+    await this.prisma.artist.update({
+      where: {
+        id,
+      },
+      data: {
+        favoritesId: null,
+      },
+    });
   }
-  addAlbum(id: string) {
+  async addAlbum(id: string) {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
-    const album = localStorage.albums.find((el) => el.id === id);
+    await this.createIfNotExist();
+    const album = await this.prisma.album.findUnique({
+      where: { id },
+    });
     if (!album) throw new Error(ErrorsMessages.albumsNotExist);
-    localStorage.favorites.albums.push(album);
+    await this.prisma.album.update({
+      where: {
+        id,
+      },
+      data: {
+        favoritesId: STATIC_UUID,
+      },
+    });
+    return album;
   }
-  deleteAlbum(id: string) {
+  async deleteAlbum(id: string) {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
-    const isAlbumExist = localStorage.albums.find((el) => el.id === id);
+    const isAlbumExist = await this.prisma.album.findUnique({
+      where: { id },
+    });
     if (!isAlbumExist) throw new Error(ErrorsMessages.albumsNotExist);
-    const indexOfTrack = localStorage.favorites.albums.findIndex(
-      (el) => el.id === id,
-    );
-    localStorage.favorites.albums.splice(indexOfTrack, 1);
+    await this.prisma.album.update({
+      where: {
+        id,
+      },
+      data: {
+        favoritesId: null,
+      },
+    });
   }
 }
