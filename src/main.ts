@@ -4,9 +4,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { stringify } from 'yaml';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as fs from 'fs';
+import { PrismaService } from './prisma/prisma.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const prismaService = app.get(PrismaService);
+  await prismaService.enableShutdownHooks(app);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   const options = new DocumentBuilder()
     .setTitle('Home Library')
