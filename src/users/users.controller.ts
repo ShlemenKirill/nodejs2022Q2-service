@@ -39,8 +39,9 @@ export class UsersController {
     isArray: true,
   })
   @UseInterceptors(ClassSerializerInterceptor)
-  async all(): Promise<UserSchema[]> {
-    return this.usersService.getAll().map((user) => {
+  async all() {
+    const users = await this.usersService.getAll();
+    return users.map((user) => {
       return new UserSchema({ ...user });
     });
   }
@@ -58,9 +59,9 @@ export class UsersController {
     description: "User don't exist",
   })
   @UseInterceptors(ClassSerializerInterceptor)
-  async getById(@Param('id') id: string): Promise<UserSchema> {
+  async getById(@Param('id') id: string) {
     try {
-      const user = this.usersService.getById(id);
+      const user = await this.usersService.getById(id);
       return new UserSchema({
         ...user,
       });
@@ -87,9 +88,9 @@ export class UsersController {
     type: UserSchema,
   })
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() createUserDto: CreateUserDto): Promise<UserSchema> {
+  async create(@Body() createUserDto: CreateUserDto) {
     try {
-      const user = this.usersService.createUser(createUserDto);
+      const user = await this.usersService.createUser(createUserDto);
       return new UserSchema({
         ...user,
       });
@@ -116,9 +117,9 @@ export class UsersController {
   async update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdatePasswordDto,
-  ): Promise<UserSchema> {
+  ) {
     try {
-      const user = this.usersService.updateUser(id, updateUserDto);
+      const user = await this.usersService.updateUser(id, updateUserDto);
       return new UserSchema({
         ...user,
       });
@@ -154,9 +155,9 @@ export class UsersController {
     description: "User don't exist",
   })
   @UseInterceptors(ClassSerializerInterceptor)
-  async remove(@Param('id') id: string): Promise<UserSchema> {
+  async remove(@Param('id') id: string) {
     try {
-      const user = this.usersService.deleteUser(id);
+      const user = await this.usersService.deleteUser(id);
       return new UserSchema({
         ...user,
       });
