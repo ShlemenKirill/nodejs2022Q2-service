@@ -1,28 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { TrackSchema } from '../schemas/track.schema';
-import { localStorage } from '../../LocalStorage';
 import { CreateTrackDto } from '../dto/create-track.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateTrackDto } from '../dto/update-track.dto';
 import { isUUID } from '@nestjs/common/utils/is-uuid';
 import { ErrorsMessages } from '../../_core/constants';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class TrackService {
-  getAll(): TrackSchema[] {
-    return localStorage.tracks;
+  constructor(private prisma: PrismaService) {}
+  async getAll(): Promise<TrackSchema[]> {
+    return await this.prisma.track.findMany();
   }
-  getById(id): TrackSchema {
+  async getById(id): Promise<TrackSchema> {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
-    const user = localStorage.tracks.find((el) => el.id === id);
-    if (!user) {
+    const track = await this.prisma.track.findUnique({ where: { id } });
+    if (!track) {
       throw new Error(ErrorsMessages.trackNotExist);
     }
-    return user;
+    return track;
   }
-  createTrack(createTrackDto: CreateTrackDto): TrackSchema {
+  async createTrack(createTrackDto: CreateTrackDto): Promise<TrackSchema> {
     const { name, albumId, duration, artistId } = createTrackDto;
     const track = {
       id: uuidv4(),
@@ -31,21 +32,23 @@ export class TrackService {
       albumId: albumId || null,
       artistId: artistId || null,
     };
-    localStorage.tracks.push(track);
+    await this.prisma.track.create({ data: track });
     return track;
   }
-  updateTrack(id: string, updateTrackDto: UpdateTrackDto): TrackSchema {
+  async updateTrack(
+    id: string,
+    updateTrackDto: UpdateTrackDto,
+  ): Promise<TrackSchema> {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
     const { name, albumId, duration, artistId } = updateTrackDto;
-    const trackToUpdate = localStorage.tracks.find((el) => el.id === id);
+    const trackToUpdate = await this.prisma.track.findUnique({
+      where: { id },
+    });
     if (!trackToUpdate) {
       throw new Error(ErrorsMessages.trackNotExist);
     }
-    const indexOfUserToUpdate = localStorage.tracks.findIndex((el) => {
-      return el.id === id;
-    });
     const resultUser = {
       id,
       name,
@@ -53,21 +56,21 @@ export class TrackService {
       duration,
       artistId,
     };
-    localStorage.tracks.splice(indexOfUserToUpdate, 1, resultUser);
+    await this.prisma.track.update({
+      where: { id },
+      data: resultUser,
+    });
     return resultUser;
   }
-  deleteTrack(id: string): TrackSchema {
+  async deleteTrack(id: string): Promise<TrackSchema> {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
-    const trackToDelete = localStorage.tracks.find((el) => el.id === id);
+    const trackToDelete = await this.prisma.track.findUnique({ where: { id } });
     if (!trackToDelete) {
       throw new Error(ErrorsMessages.trackNotExist);
     }
-    const indexOfTrackToDelete = localStorage.tracks.findIndex(
-      (el) => el.id === id,
-    );
-    localStorage.tracks.splice(indexOfTrackToDelete, 1);
+    await this.prisma.track.delete({ where: { id } });
     return trackToDelete;
   }
 }
