@@ -1,76 +1,83 @@
 import { Injectable } from '@nestjs/common';
 import { ArtistSchema } from '../schemas/artist.schema';
-import { localStorage } from '../../LocalStorage';
 import { CreateArtistDto } from '../dto/create-artist.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateArtistDto } from '../dto/update-artist.dto';
 import { isUUID } from '@nestjs/common/utils/is-uuid';
 import { ErrorsMessages } from '../../_core/constants';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class ArtistService {
-  getAll(): ArtistSchema[] {
-    return localStorage.artists;
+  constructor(private prisma: PrismaService) {}
+  async getAll(): Promise<ArtistSchema[]> {
+    return this.prisma.artist.findMany();
   }
-  getById(id): ArtistSchema {
+  async getById(id): Promise<ArtistSchema> {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
-    const artist = localStorage.artists.find((el) => el.id === id);
+    const artist = await this.prisma.artist.findUnique({ where: { id } });
     if (!artist) {
       throw new Error(ErrorsMessages.artistNotExist);
     }
     return artist;
   }
-  createArtist(createArtistDto: CreateArtistDto): ArtistSchema {
+  async createArtist(createArtistDto: CreateArtistDto): Promise<ArtistSchema> {
     const { name, grammy } = createArtistDto;
     const artist = {
       id: uuidv4(),
       name,
       grammy,
     };
-    localStorage.artists.push(artist);
+    await this.prisma.artist.create({ data: artist });
     return artist;
   }
-  updateArtist(id: string, updateArtistDto: UpdateArtistDto): ArtistSchema {
+  async updateArtist(
+    id: string,
+    updateArtistDto: UpdateArtistDto,
+  ): Promise<ArtistSchema> {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
     const { name, grammy } = updateArtistDto;
-    const artistToUpdate = localStorage.artists.find((el) => el.id === id);
+    const artistToUpdate = await this.prisma.artist.findUnique({
+      where: { id },
+    });
     if (!artistToUpdate) {
       throw new Error(ErrorsMessages.artistNotExist);
     }
-    const indexOfArtistToUpdate = localStorage.artists.findIndex((el) => {
-      return el.id === id;
-    });
     const resultArtist = {
       id,
       name,
       grammy,
     };
-    localStorage.artists.splice(indexOfArtistToUpdate, 1, resultArtist);
+    await this.prisma.artist.update({
+      where: { id },
+      data: artistToUpdate,
+    });
     return resultArtist;
   }
-  deleteArtist(id: string): ArtistSchema {
+  async deleteArtist(id: string): Promise<ArtistSchema> {
     if (!isUUID(id)) {
       throw new Error(ErrorsMessages.notValidUuid);
     }
-    const artistToDelete = localStorage.artists.find((el) => el.id === id);
+    const artistToDelete = await this.prisma.artist.findUnique({
+      where: { id },
+    });
     if (!artistToDelete) {
       throw new Error(ErrorsMessages.artistNotExist);
     }
-    const indexOfArtistToDelete = localStorage.artists.findIndex(
-      (el) => el.id === id,
-    );
-    localStorage.artists.splice(indexOfArtistToDelete, 1);
-    const indexOfTrackToUpdate = localStorage.tracks.findIndex(
-      (el) => el.artistId === id,
-    );
-    localStorage.tracks[indexOfTrackToUpdate] = {
-      ...localStorage.tracks[indexOfTrackToUpdate],
-      artistId: null,
-    };
+    await this.prisma.artist.delete({ where: { id } });
+    const trackToUpdate = await this.prisma.track.findFirst({
+      where: { artistId: id },
+    });
+    await this.prisma.track.update({
+      where: { id: trackToUpdate.id },
+      data: {
+        artistId: null,
+      },
+    });
     return artistToDelete;
   }
 }

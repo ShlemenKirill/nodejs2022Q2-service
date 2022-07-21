@@ -34,7 +34,7 @@ export class ArtistsController {
   @HttpCode(200)
   async getById(@Param('id') id: string): Promise<ArtistSchema> {
     try {
-      return this.artistService.getById(id);
+      return await this.artistService.getById(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:
@@ -56,7 +56,7 @@ export class ArtistsController {
     @Body() createArtistDto: CreateArtistDto,
   ): Promise<ArtistSchema> {
     try {
-      return this.artistService.createArtist(createArtistDto);
+      return await this.artistService.createArtist(createArtistDto);
     } catch (error) {
       console.error(error.message);
     }
@@ -68,7 +68,7 @@ export class ArtistsController {
     @Body() updateArtistDto: UpdateArtistDto,
   ): Promise<ArtistSchema> {
     try {
-      return this.artistService.updateArtist(id, updateArtistDto);
+      return await this.artistService.updateArtist(id, updateArtistDto);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:
@@ -88,8 +88,8 @@ export class ArtistsController {
   @HttpCode(204)
   async remove(@Param('id') id: string): Promise<ArtistSchema> {
     try {
-      this.favoritesService.deleteArtist(id);
-      return this.artistService.deleteArtist(id);
+      await this.favoritesService.deleteArtist(id);
+      return await this.artistService.deleteArtist(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:
