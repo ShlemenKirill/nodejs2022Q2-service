@@ -41,7 +41,7 @@ export class AlbumsController {
     isArray: true,
   })
   async all(): Promise<AlbumsSchema[]> {
-    return this.albumsService.getAll();
+    return await this.albumsService.getAll();
   }
 
   @Get(':id')
@@ -58,7 +58,7 @@ export class AlbumsController {
   })
   async getById(@Param('id') id: string): Promise<AlbumsSchema> {
     try {
-      return this.albumsService.getById(id);
+      return await this.albumsService.getById(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.albumsNotExist:
@@ -83,7 +83,7 @@ export class AlbumsController {
   })
   async create(@Body() createAlbumDto: CreateAlbumDto): Promise<AlbumsSchema> {
     try {
-      return this.albumsService.createAlbum(createAlbumDto);
+      return await this.albumsService.createAlbum(createAlbumDto);
     } catch (error) {
       console.error(error.message);
     }
@@ -109,7 +109,7 @@ export class AlbumsController {
     @Body() updateAlbumDto: UpdateAlbumDto,
   ): Promise<AlbumsSchema> {
     try {
-      return this.albumsService.updateAlbum(id, updateAlbumDto);
+      return await this.albumsService.updateAlbum(id, updateAlbumDto);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.albumsNotExist:
@@ -139,8 +139,8 @@ export class AlbumsController {
   })
   async remove(@Param('id') id: string): Promise<AlbumsSchema> {
     try {
-      this.favoritesService.deleteAlbum(id);
-      return this.albumsService.deleteAlbum(id);
+      await this.favoritesService.deleteAlbum(id);
+      return await this.albumsService.deleteAlbum(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.albumsNotExist:
