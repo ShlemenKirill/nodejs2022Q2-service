@@ -17,9 +17,9 @@ services:
     networks:
       - postgres
     env_file:
-      - docker.env
+      - .env
     ports:
-      - '5432:5432'
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
   app:
     image: kirillshlemen/nodejs2022q2-service_app
     container_name: nest_REST_API
@@ -27,7 +27,9 @@ services:
       context: .
       dockerfile: ./docker/app/Dockerfile
     ports:
-      - '4000:4000'
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
     depends_on:
       - postgres
     volumes:
