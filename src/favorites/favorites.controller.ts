@@ -19,14 +19,13 @@ export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
   @Get()
   @HttpCode(200)
-  async all(): Promise<FavoritesSchema> {
+  async all() {
     const allValues = await this.favoritesService.getAll();
-    return allValues;
-    // return {
-    //   albums: allValues[0]?.albums || [],
-    //   tracks: allValues[0]?.tracks || [],
-    //   artists: allValues[0]?.artists || [],
-    // };
+    return {
+      albums: allValues?.albums || [],
+      tracks: allValues?.tracks || [],
+      artists: allValues?.artists || [],
+    };
   }
   @Post('/track/:id')
   @HttpCode(201)
