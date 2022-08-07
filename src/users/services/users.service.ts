@@ -78,4 +78,10 @@ export class UsersService {
       where: { id },
     });
   }
+
+  async findOne(login: string) {
+    return this.prisma.user.findFirst({
+      where: { login: login },
+    });
+  }
 }

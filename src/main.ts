@@ -5,6 +5,7 @@ import { stringify } from 'yaml';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { PrismaService } from './prisma/prisma.service';
+import passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
