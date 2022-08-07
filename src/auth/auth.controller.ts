@@ -7,12 +7,13 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './services/auth.service';
 import { UserSchema } from '../users/schemas/user.schema';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/services/users.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('Auth')
 @Controller('/auth')
@@ -55,6 +56,8 @@ export class AuthController {
     );
     return this.authService.login(user);
   }
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Post('/refresh')
   @HttpCode(201)
   @ApiCreatedResponse({

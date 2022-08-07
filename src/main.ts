@@ -5,7 +5,6 @@ import { stringify } from 'yaml';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { PrismaService } from './prisma/prisma.service';
-import passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +12,7 @@ async function bootstrap() {
   await prismaService.enableShutdownHooks(app);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   const options = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Home Library')
     .setDescription('Home library api')
     .setVersion('1.0')

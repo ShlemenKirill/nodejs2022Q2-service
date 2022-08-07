@@ -9,16 +9,20 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { TrackSchema } from './schemas/track.schema';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { TrackService } from './services/track.service';
 import { ErrorsMessages } from '../_core/constants';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FavoritesService } from '../favorites/services/favorites.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Tracks')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('/track')
 export class TracksController {
   constructor(

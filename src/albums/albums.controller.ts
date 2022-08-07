@@ -9,6 +9,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { AlbumsSchema } from './schemas/albums.schema';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -17,6 +18,7 @@ import { AlbumsService } from './services/albums.service';
 import { ErrorsMessages } from '../_core/constants';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -24,7 +26,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { FavoritesService } from '../favorites/services/favorites.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('Albums')
 @Controller('/album')
 export class AlbumsController {
