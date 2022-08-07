@@ -16,6 +16,9 @@ paths:
       tags:
         &a1
         - Users
+      security:
+        &a2
+        - bearer: []
     post:
       operationId: UsersController_create
       parameters: []
@@ -33,6 +36,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/UserSchema"
       tags: *a1
+      security: *a2
   "/user/{id}":
     get:
       operationId: UsersController_getById
@@ -54,6 +58,7 @@ paths:
         "404":
           description: User don't exist
       tags: *a1
+      security: *a2
     put:
       operationId: UsersController_update
       parameters:
@@ -82,6 +87,7 @@ paths:
         "404":
           description: User don't exist
       tags: *a1
+      security: *a2
     delete:
       operationId: UsersController_remove
       parameters:
@@ -96,6 +102,7 @@ paths:
         "404":
           description: User deletes successfully
       tags: *a1
+      security: *a2
   /track:
     get:
       operationId: TracksController_all
@@ -104,8 +111,11 @@ paths:
         "200":
           description: ""
       tags:
-        &a2
+        &a3
         - Tracks
+      security:
+        &a4
+        - bearer: []
     post:
       operationId: TracksController_create
       parameters: []
@@ -118,7 +128,8 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a2
+      tags: *a3
+      security: *a4
   "/track/{id}":
     get:
       operationId: TracksController_getById
@@ -131,7 +142,8 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a2
+      tags: *a3
+      security: *a4
     put:
       operationId: TracksController_update
       parameters:
@@ -149,7 +161,8 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a2
+      tags: *a3
+      security: *a4
     delete:
       operationId: TracksController_remove
       parameters:
@@ -161,7 +174,8 @@ paths:
       responses:
         "204":
           description: ""
-      tags: *a2
+      tags: *a3
+      security: *a4
   /artist:
     get:
       operationId: ArtistsController_all
@@ -170,8 +184,11 @@ paths:
         "200":
           description: ""
       tags:
-        &a3
+        &a5
         - Artists
+      security:
+        &a6
+        - bearer: []
     post:
       operationId: ArtistsController_create
       parameters: []
@@ -184,7 +201,8 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a3
+      tags: *a5
+      security: *a6
   "/artist/{id}":
     get:
       operationId: ArtistsController_getById
@@ -197,7 +215,8 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a3
+      tags: *a5
+      security: *a6
     put:
       operationId: ArtistsController_update
       parameters:
@@ -215,7 +234,8 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a3
+      tags: *a5
+      security: *a6
     delete:
       operationId: ArtistsController_remove
       parameters:
@@ -227,7 +247,8 @@ paths:
       responses:
         "204":
           description: ""
-      tags: *a3
+      tags: *a5
+      security: *a6
   /album:
     get:
       operationId: AlbumsController_all
@@ -242,8 +263,11 @@ paths:
                 items:
                   $ref: "#/components/schemas/AlbumsSchema"
       tags:
-        &a4
+        &a7
         - Albums
+      security:
+        &a8
+        - bearer: []
     post:
       operationId: AlbumsController_create
       parameters: []
@@ -260,7 +284,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AlbumsSchema"
-      tags: *a4
+      tags: *a7
+      security: *a8
   "/album/{id}":
     get:
       operationId: AlbumsController_getById
@@ -281,7 +306,8 @@ paths:
           description: Incorrect input
         "404":
           description: Album don't exist
-      tags: *a4
+      tags: *a7
+      security: *a8
     put:
       operationId: AlbumsController_update
       parameters:
@@ -309,7 +335,8 @@ paths:
           description: Incorrect password
         "404":
           description: Album don't exist
-      tags: *a4
+      tags: *a7
+      security: *a8
     delete:
       operationId: AlbumsController_remove
       parameters:
@@ -323,7 +350,8 @@ paths:
           description: Not valid UUID
         "404":
           description: Album deletes successfully
-      tags: *a4
+      tags: *a7
+      security: *a8
   /favs:
     get:
       operationId: FavoritesController_all
@@ -332,8 +360,11 @@ paths:
         "200":
           description: ""
       tags:
-        &a5
+        &a9
         - Favorites
+      security:
+        &a10
+        - bearer: []
   "/favs/track/{id}":
     post:
       operationId: FavoritesController_addTrack
@@ -346,7 +377,8 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a5
+      tags: *a9
+      security: *a10
     delete:
       operationId: FavoritesController_deleteTrack
       parameters:
@@ -358,7 +390,8 @@ paths:
       responses:
         "204":
           description: ""
-      tags: *a5
+      tags: *a9
+      security: *a10
   "/favs/album/{id}":
     post:
       operationId: FavoritesController_addAlbum
@@ -371,7 +404,8 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a5
+      tags: *a9
+      security: *a10
     delete:
       operationId: FavoritesController_deleteAlbum
       parameters:
@@ -383,7 +417,8 @@ paths:
       responses:
         "204":
           description: ""
-      tags: *a5
+      tags: *a9
+      security: *a10
   "/favs/artist/{id}":
     post:
       operationId: FavoritesController_addArtist
@@ -396,7 +431,8 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a5
+      tags: *a9
+      security: *a10
     delete:
       operationId: FavoritesController_deleteArtist
       parameters:
@@ -408,7 +444,8 @@ paths:
       responses:
         "204":
           description: ""
-      tags: *a5
+      tags: *a9
+      security: *a10
   /auth/signup:
     post:
       operationId: AuthController_signup
@@ -427,7 +464,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/UserSchema"
       tags:
-        &a6
+        &a11
         - Auth
   /auth/login:
     post:
@@ -446,7 +483,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserSchema"
-      tags: *a6
+      tags: *a11
   /auth/refresh:
     post:
       operationId: AuthController_refresh
@@ -464,7 +501,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserSchema"
-      tags: *a6
+      tags: *a11
+      security:
+        - bearer: []
 info:
   title: Home Library
   description: Home library api
@@ -473,6 +512,11 @@ info:
 tags: []
 servers: []
 components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
   schemas:
     UserSchema:
       type: object
