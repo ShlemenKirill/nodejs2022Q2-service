@@ -8,7 +8,13 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/ShlemenKirill/nodejs2022Q2-service.git
+```
+
+## Checkout branch
+
+```git
+git checkout database-orm
 ```
 
 ## Installing NPM modules
@@ -18,14 +24,28 @@ npm install
 ```
 
 ## Running application
-
+Build container
 ```
 docker compose up -d --build
 ```
+Start container
+```
+docker-compose start
+```
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+## Migrations
+### Note: run this commands inside docker container with app using cli
+Initializing
+
+```prisma
+npx prisma generate
+```
+
+Create migrations
+```prisma
+npx prisma migrate dev --name init
+```
+
 
 ## Testing
 
@@ -64,6 +84,12 @@ npm run lint
 ```
 npm run format
 ```
+
+## Docs
+After starting the app on port (4000 as default) you can open
+in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
+For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
 
 ### Debugging in VSCode
 

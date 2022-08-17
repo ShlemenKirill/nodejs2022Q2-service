@@ -8,10 +8,10 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
-import { FavoritesSchema } from './schemas/favorites.schema';
 import { FavoritesService } from './services/favorites.service';
 import { ErrorsMessages } from '../_core/constants';
 import { ApiTags } from '@nestjs/swagger';
+import { FavoritesSchema } from './schemas/favorites.schema';
 
 @ApiTags('Favorites')
 @Controller('/favs')
@@ -19,14 +19,19 @@ export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
   @Get()
   @HttpCode(200)
-  async all(): Promise<FavoritesSchema> {
-    return this.favoritesService.getAll();
+  async all() {
+    const allValues = await this.favoritesService.getAll();
+    return {
+      albums: allValues?.albums || [],
+      tracks: allValues?.tracks || [],
+      artists: allValues?.artists || [],
+    };
   }
   @Post('/track/:id')
   @HttpCode(201)
   async addTrack(@Param('id') id: string) {
     try {
-      return this.favoritesService.addTrack(id);
+      await this.favoritesService.addTrack(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:
@@ -46,7 +51,7 @@ export class FavoritesController {
   @HttpCode(204)
   async deleteTrack(@Param('id') id: string) {
     try {
-      return this.favoritesService.deleteTrack(id);
+      await this.favoritesService.deleteTrack(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:
@@ -66,7 +71,7 @@ export class FavoritesController {
   @HttpCode(201)
   async addAlbum(@Param('id') id: string) {
     try {
-      return this.favoritesService.addAlbum(id);
+      await this.favoritesService.addAlbum(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:
@@ -86,7 +91,7 @@ export class FavoritesController {
   @HttpCode(204)
   async deleteAlbum(@Param('id') id: string) {
     try {
-      return this.favoritesService.deleteAlbum(id);
+      await this.favoritesService.deleteAlbum(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:
@@ -106,7 +111,7 @@ export class FavoritesController {
   @HttpCode(201)
   async addArtist(@Param('id') id: string) {
     try {
-      return this.favoritesService.addArtist(id);
+      await this.favoritesService.addArtist(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:
@@ -126,7 +131,7 @@ export class FavoritesController {
   @HttpCode(204)
   async deleteArtist(@Param('id') id: string) {
     try {
-      return this.favoritesService.deleteArtist(id);
+      await this.favoritesService.deleteArtist(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:

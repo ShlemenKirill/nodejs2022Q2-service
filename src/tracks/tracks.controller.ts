@@ -28,13 +28,13 @@ export class TracksController {
   @Get()
   @HttpCode(200)
   async all(): Promise<TrackSchema[]> {
-    return this.trackService.getAll();
+    return await this.trackService.getAll();
   }
   @Get(':id')
   @HttpCode(200)
   async getById(@Param('id') id: string): Promise<TrackSchema> {
     try {
-      return this.trackService.getById(id);
+      return await this.trackService.getById(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:
@@ -54,7 +54,7 @@ export class TracksController {
   @HttpCode(201)
   async create(@Body() createTrackDto: CreateTrackDto): Promise<TrackSchema> {
     try {
-      return this.trackService.createTrack(createTrackDto);
+      return await this.trackService.createTrack(createTrackDto);
     } catch (error) {
       console.error(error.message);
     }
@@ -66,7 +66,7 @@ export class TracksController {
     @Body() updateTrackDto: UpdateTrackDto,
   ): Promise<TrackSchema> {
     try {
-      return this.trackService.updateTrack(id, updateTrackDto);
+      return await this.trackService.updateTrack(id, updateTrackDto);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:
@@ -86,8 +86,8 @@ export class TracksController {
   @HttpCode(204)
   async remove(@Param('id') id: string): Promise<TrackSchema> {
     try {
-      this.favoritesService.deleteTrack(id);
-      return this.trackService.deleteTrack(id);
+      await this.favoritesService.deleteTrack(id);
+      return await this.trackService.deleteTrack(id);
     } catch (error) {
       switch (error.message) {
         case ErrorsMessages.notValidUuid:
