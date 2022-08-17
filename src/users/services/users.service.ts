@@ -7,6 +7,7 @@ import { isUUID } from '@nestjs/common/utils/is-uuid';
 import { ErrorsMessages } from '../../_core/constants';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -26,10 +27,12 @@ export class UsersService {
   }
   async createUser(createUserDto: CreateUserDto) {
     const { login, password } = createUserDto;
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(password, salt);
     const user = {
       id: uuidv4(),
       login,
-      password,
+      password: hash,
       version: 1,
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -49,13 +52,16 @@ export class UsersService {
       throw new Error(ErrorsMessages.userNotExist);
     }
     const { id: userId, login, password, version, createdAt } = userToUpdate;
-    if (password !== oldPassword) {
+    const isMatch = await bcrypt.compare(oldPassword, password);
+    if (!isMatch) {
       throw new Error(ErrorsMessages.notCorrectPassword);
     }
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(newPassword, salt);
     const resultUser: Prisma.UserUpdateInput = {
       id: userId,
       login,
-      password: newPassword,
+      password: hash,
       version: version + 1,
       createdAt: createdAt,
       updatedAt: Date.now(),
@@ -76,6 +82,12 @@ export class UsersService {
     }
     return await this.prisma.user.delete({
       where: { id },
+    });
+  }
+
+  async findOne(login: string) {
+    return this.prisma.user.findFirst({
+      where: { login: login },
     });
   }
 }

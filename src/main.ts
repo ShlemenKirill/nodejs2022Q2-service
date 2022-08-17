@@ -12,6 +12,7 @@ async function bootstrap() {
   await prismaService.enableShutdownHooks(app);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   const options = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Home Library')
     .setDescription('Home library api')
     .setVersion('1.0')
